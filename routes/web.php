@@ -24,3 +24,5 @@ Route::get('skills', function(){
     return ['Laravel', 'Vue', 'PHP', 'Tooling'];
 
 });
+
+Route::resource('projects', 'ProjectsController');
