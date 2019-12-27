@@ -49464,22 +49464,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 var Errors =
 /*#__PURE__*/
@@ -49505,7 +49490,11 @@ function () {
   }, {
     key: "clear",
     value: function clear(field) {
-      delete this.errors[field];
+      if (field) {
+        delete this.errors[field];
+      } else {
+        this.errors = {};
+      }
     }
   }, {
     key: "exists",
@@ -49522,35 +49511,121 @@ function () {
   return Errors;
 }();
 
+var Form =
+/*#__PURE__*/
+function () {
+  function Form(data) {
+    _classCallCheck(this, Form);
+
+    /* Form Data */
+    this.originalData = data;
+
+    for (var field in data) {
+      this[field] = data[field];
+    }
+    /* Errors Instance */
+
+
+    this.errors = new Errors();
+  }
+
+  _createClass(Form, [{
+    key: "data",
+    value: function data() {
+      var cloneData = Object.assign({}, this);
+      delete cloneData.originalData;
+      delete cloneData.errors;
+      return cloneData;
+    }
+  }, {
+    key: "post",
+    value: function post(endpoint) {
+      return axios.post(endpoint, this.data());
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      return axios.get(endpoint, this.data());
+    }
+  }, {
+    key: "put",
+    value: function put() {
+      return axios.put(endpoint, this.data());
+    }
+  }, {
+    key: "patch",
+    value: function patch() {
+      return axios.patch(endpoint, this.data());
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      return axios["delete"](endpoint, this.data());
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      for (var field in this.data()) {
+        this[field] = '';
+      }
+    }
+  }, {
+    key: "submit",
+    value: function submit(requestType, endpoint) {
+      axios[requestType](endpoint, this.data).then(this.onSuccess.bind(this))["catch"](this.onFail.bind(this));
+    }
+  }, {
+    key: "onSuccess",
+    value: function onSuccess(result) {
+      var response = result.data;
+      console.log(response);
+
+      if (response.responseCode == 1) {
+        alert(response.message); // location.reload();
+
+        /* Return some shit here to the Vue instance then process that response */
+      } else {
+        alert("Something went wrong."); // location.reload();
+      }
+    }
+  }, {
+    key: "onFail",
+    value: function onFail(error) {
+      this.errors.record(error.response.data.errors);
+    }
+  }]);
+
+  return Form;
+}();
+
 var app = new Vue({
   el: '#app',
   data: {
-    project_name: '',
-    description: '',
-    errors: new Errors()
+    formService: new Form({
+      project_name: '',
+      description: ''
+    })
   },
   methods: {
     submitForm: function submitForm() {
       var _this = this;
 
-      axios.post('/projects', this.$data).then(this.onSuccess)["catch"](function (error) {
-        _this.errors.record(error.response.data.errors);
-      });
-    },
-    onSuccess: function onSuccess(result) {
-      var response = result.data;
-      console.log(response);
+      // this.formService.submit('post', '/projects');
+      this.formService.post('/projects').then(function (result) {
+        var response = result.data;
+        console.log(response);
 
-      if (response.responseCode == 1) {
-        alert(response.message);
-        location.reload();
-      } else {
-        alert("Something went wrong.");
-        location.reload();
-      }
+        if (response.responseCode == 1) {
+          alert(response.message);
+
+          _this.formService.reset();
+        } else {
+          alert("Something went wrong.");
+        }
+      })["catch"](function (error) {
+        _this.formService.errors.record(error.response.data.errors);
+      });
     }
-  },
-  mounted: function mounted() {// console.log(`balagaboom`);
   }
 });
 
