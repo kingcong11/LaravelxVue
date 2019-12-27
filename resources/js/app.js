@@ -8,24 +8,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 class Errors {
 
@@ -44,7 +28,12 @@ class Errors {
     }
 
     clear(field){
-        delete this.errors[field];
+
+        if(field){
+            delete this.errors[field];
+        }else{
+            this.errors = {};
+        }
     }
 
     exists(field){
@@ -55,6 +44,90 @@ class Errors {
         return (Object.keys(this.errors).length > 0);       
     }
 
+}
+
+class Form{
+
+    constructor(data) {
+
+        /* Form Data */
+
+        this.originalData = data;
+
+        for(let field in data){
+            this[field] = data[field];
+        }
+
+
+        /* Errors Instance */
+
+        this.errors = new Errors();
+
+
+    }
+
+    data(){
+
+        let cloneData = Object.assign({}, this);
+
+        delete cloneData.originalData;
+        delete cloneData.errors;
+
+        return cloneData;
+        
+    }
+
+    post(endpoint){
+        return axios.post(endpoint, this.data());
+    }
+
+    get(){
+        return axios.get(endpoint, this.data());
+    }
+
+    put(){
+        return axios.put(endpoint, this.data());
+    }
+
+    patch(){
+        return axios.patch(endpoint, this.data());
+    }
+
+    delete(){
+        return axios.delete(endpoint, this.data());
+    }
+
+    reset(){
+
+        for (let field in this.data()){
+            this[field] = '';
+        }
+    }
+    
+    submit(requestType, endpoint){
+
+        axios[requestType](endpoint, this.data)
+            .then(this.onSuccess.bind(this))
+            .catch(this.onFail.bind(this));
+    }
+
+    onSuccess(result){
+
+        var response = result.data;
+        console.log(response);
+
+        if(response.responseCode == 1){
+            alert(response.message);
+            // location.reload();
+        }else{
+            alert(`Something went wrong.`);
+            // location.reload();
+        }
+    }
+
+    onFail(error){
+        this.errors.record(error.response.data.errors);
+    }
 
 }
 
@@ -62,42 +135,38 @@ const app = new Vue({
     el: '#app',
 
     data: {
-        project_name : '',
-        description  : '',
-        errors       : new Errors()
+        formService  : new Form({
+            project_name : '',
+            description  : ''
+        })
     },
 
     methods: {
 
         submitForm(){
 
-            axios.post('/projects', this.$data)
-                .then(this.onSuccess)
+            // this.formService.submit('post', '/projects');
+
+            this.formService.post('/projects')
+                .then(result => {
+                    var response = result.data;
+                    console.log(response);
+
+                    if(response.responseCode == 1){
+                        alert(response.message);
+                        this.formService.reset();
+                    }else{
+                        alert(`Something went wrong.`);
+                    }
+
+                })
                 .catch(error => {
-                    this.errors.record(error.response.data.errors);
-                });
+                    this.formService.errors.record(error.response.data.errors);
+                })
 
 
         },
-
-        onSuccess(result){
-
-            var response = result.data;
-            console.log(response);
-
-            if(response.responseCode == 1){
-                alert(response.message);
-                location.reload();
-            }else{
-                alert(`Something went wrong.`);
-                location.reload();
-
-            }
-        }
         
     },
 
-    mounted(){
-        // console.log(`balagaboom`);
-    }
 });
