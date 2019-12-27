@@ -49532,35 +49532,38 @@ function () {
   _createClass(Form, [{
     key: "data",
     value: function data() {
-      var cloneData = Object.assign({}, this);
-      delete cloneData.originalData;
-      delete cloneData.errors;
+      var cloneData = {};
+
+      for (var property in this.originalData) {
+        cloneData[property] = this[property];
+      }
+
       return cloneData;
     }
   }, {
     key: "post",
     value: function post(endpoint) {
-      return axios.post(endpoint, this.data());
+      return this.submit('post', endpoint);
     }
   }, {
     key: "get",
     value: function get() {
-      return axios.get(endpoint, this.data());
+      return this.submit('get', endpoint);
     }
   }, {
     key: "put",
     value: function put() {
-      return axios.put(endpoint, this.data());
+      return this.submit('put', endpoint);
     }
   }, {
     key: "patch",
     value: function patch() {
-      return axios.patch(endpoint, this.data());
+      return this.submit('patch', endpoint);
     }
   }, {
     key: "delete",
     value: function _delete() {
-      return axios["delete"](endpoint, this.data());
+      return this.submit('delete', endpoint);
     }
   }, {
     key: "reset",
@@ -49568,30 +49571,44 @@ function () {
       for (var field in this.data()) {
         this[field] = '';
       }
+
+      this.errors.clear();
     }
   }, {
     key: "submit",
     value: function submit(requestType, endpoint) {
-      axios[requestType](endpoint, this.data).then(this.onSuccess.bind(this))["catch"](this.onFail.bind(this));
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios[requestType](endpoint, _this.data()).then(function (result) {
+          _this.onSuccess(result.data);
+
+          resolve(result.data);
+        })["catch"](function (error) {
+          _this.onFail(error.response.data.errors);
+
+          reject(error.response.data.errors);
+        });
+      });
     }
   }, {
     key: "onSuccess",
-    value: function onSuccess(result) {
-      var response = result.data;
+    value: function onSuccess(response) {
       console.log(response);
 
       if (response.responseCode == 1) {
-        alert(response.message); // location.reload();
-
-        /* Return some shit here to the Vue instance then process that response */
+        alert(response.message); //this would be a general response, you can place general actions here after submitting form
       } else {
-        alert("Something went wrong."); // location.reload();
+        alert("Other general response"); //this would be a general response, you can place general actions here after submitting form
       }
+
+      this.reset();
     }
   }, {
     key: "onFail",
-    value: function onFail(error) {
-      this.errors.record(error.response.data.errors);
+    value: function onFail(errors) {
+      console.log(errors);
+      this.errors.record(errors);
     }
   }]);
 
@@ -49608,22 +49625,11 @@ var app = new Vue({
   },
   methods: {
     submitForm: function submitForm() {
-      var _this = this;
-
-      // this.formService.submit('post', '/projects');
-      this.formService.post('/projects').then(function (result) {
-        var response = result.data;
-        console.log(response);
-
-        if (response.responseCode == 1) {
-          alert(response.message);
-
-          _this.formService.reset();
-        } else {
-          alert("Something went wrong.");
-        }
+      this.formService.post('/projects').then(function (response) {
+        console.log("Reload");
       })["catch"](function (error) {
-        _this.formService.errors.record(error.response.data.errors);
+        // this you want to do
+        console.log("promt this");
       });
     }
   }
