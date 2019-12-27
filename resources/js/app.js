@@ -68,33 +68,34 @@ class Form{
 
     data(){
 
-        let cloneData = Object.assign({}, this);
+        let cloneData = {};
 
-        delete cloneData.originalData;
-        delete cloneData.errors;
+        for (let property in this.originalData){
+            cloneData[property] = this[property];
+        }
 
         return cloneData;
         
     }
 
     post(endpoint){
-        return axios.post(endpoint, this.data());
+        return this.submit('post', endpoint);
     }
 
     get(){
-        return axios.get(endpoint, this.data());
+        return this.submit('get', endpoint);
     }
 
     put(){
-        return axios.put(endpoint, this.data());
+        return this.submit('put', endpoint);
     }
 
     patch(){
-        return axios.patch(endpoint, this.data());
+        return this.submit('patch', endpoint);
     }
 
     delete(){
-        return axios.delete(endpoint, this.data());
+        return this.submit('delete', endpoint);
     }
 
     reset(){
@@ -102,31 +103,46 @@ class Form{
         for (let field in this.data()){
             this[field] = '';
         }
+
+        this.errors.clear();
     }
     
     submit(requestType, endpoint){
 
-        axios[requestType](endpoint, this.data)
-            .then(this.onSuccess.bind(this))
-            .catch(this.onFail.bind(this));
+        return new Promise((resolve, reject) => {
+
+            axios[requestType](endpoint, this.data())
+                .then(result => {
+                    this.onSuccess(result.data);
+
+                    resolve(result.data);
+                })
+                .catch(error => {
+                    this.onFail(error.response.data.errors);
+
+                    reject(error.response.data.errors);
+                })
+        });
+
     }
 
-    onSuccess(result){
+    onSuccess(response){
 
-        var response = result.data;
         console.log(response);
 
         if(response.responseCode == 1){
-            alert(response.message);
-            // location.reload();
+            alert(response.message); //this would be a general response, you can place general actions here after submitting form
         }else{
-            alert(`Something went wrong.`);
-            // location.reload();
+            alert(`Other general response`); //this would be a general response, you can place general actions here after submitting form
         }
+
+        this.reset();
     }
 
-    onFail(error){
-        this.errors.record(error.response.data.errors);
+    onFail(errors){
+
+        console.log(errors);
+        this.errors.record(errors);
     }
 
 }
@@ -145,25 +161,14 @@ const app = new Vue({
 
         submitForm(){
 
-            // this.formService.submit('post', '/projects');
-
             this.formService.post('/projects')
-                .then(result => {
-                    var response = result.data;
-                    console.log(response);
-
-                    if(response.responseCode == 1){
-                        alert(response.message);
-                        this.formService.reset();
-                    }else{
-                        alert(`Something went wrong.`);
-                    }
-
+                .then(response => {
+                    console.log(`Reload`);
                 })
                 .catch(error => {
-                    this.formService.errors.record(error.response.data.errors);
-                })
-
+                    // this you want to do
+                    console.log(`promt this`);
+                });
 
         },
         
