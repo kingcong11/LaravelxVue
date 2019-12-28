@@ -68,6 +68,8 @@
         <div id="app" class="container">
         
             <h1>Skills ng Pinas</h1>
+            <notification-component></notification-component>
+                
             <ul>
                 <li v-for="skill in skills" v-text="skill"></li>
             </ul>
