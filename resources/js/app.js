@@ -10,6 +10,8 @@ window.Vue = require('vue');
 
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('notification-component', require('./components/NotificationComponent.vue').default);
+
 
 class Errors {
 

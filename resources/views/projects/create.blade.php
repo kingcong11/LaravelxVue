@@ -33,6 +33,7 @@
     
     @if($projects->count() > 0)
         <h3 class="title is-3">Created Projects</h3>
+        <notification-component></notification-component>
 
         @foreach ($projects as $project)
             <li>{{ $project->project_name }}</li>

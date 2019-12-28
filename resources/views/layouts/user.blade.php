@@ -7,6 +7,7 @@
     <title>@yield('title', 'Default Title')</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/app.css">
 
     <style>
         body{
