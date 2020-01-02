@@ -11,6 +11,8 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('notification-component', require('./components/NotificationComponent.vue').default);
+Vue.component('coupon-component', require('./components/CouponComponent.vue').default);
+
 
 
 class Errors {
@@ -156,7 +158,8 @@ const app = new Vue({
         formService  : new Form({
             project_name : '',
             description  : ''
-        })
+        }),
+        coupon_code : "SAMPLE-CODE"
     },
 
     methods: {
@@ -178,30 +181,3 @@ const app = new Vue({
 
 });
 
-
-let sharedResources = {
-    user : {
-        name : 'Balagaboom'
-    }
-}
-
-
-const one = new Vue({
-
-    el: '#one',
-
-    data: {
-        shared : sharedResources
-    } 
-
-});
-
-const two = new Vue({
-
-    el: '#two',
-
-    data: {
-        shared : sharedResources
-    } 
-
-});

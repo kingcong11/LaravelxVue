@@ -8,15 +8,9 @@
     <h1>Testing</h1>
 
 
+    <coupon-component v-model="coupon_code"></coupon-component>
+    
+
+
 
 @endsection
-
-
-
-    <div id="one">
-        @{{ shared.user.name }}
-    </div>
-
-    <div id="two">
-        @{{ shared.user.name }}
-    </div>
