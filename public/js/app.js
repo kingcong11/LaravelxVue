@@ -50146,15 +50146,12 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core_Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/Form */ "./resources/js/core/Form.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -50163,162 +50160,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('notification-component', __webpack_require__(/*! ./components/NotificationComponent.vue */ "./resources/js/components/NotificationComponent.vue")["default"]);
-
-var Errors =
-/*#__PURE__*/
-function () {
-  function Errors() {
-    _classCallCheck(this, Errors);
-
-    this.errors = {};
-  }
-
-  _createClass(Errors, [{
-    key: "get",
-    value: function get(field) {
-      if (this.errors[field]) {
-        return this.errors[field][0];
-      }
-    }
-  }, {
-    key: "record",
-    value: function record(errors) {
-      this.errors = errors;
-    }
-  }, {
-    key: "clear",
-    value: function clear(field) {
-      if (field) {
-        delete this.errors[field];
-      } else {
-        this.errors = {};
-      }
-    }
-  }, {
-    key: "exists",
-    value: function exists(field) {
-      return this.errors[field] ? true : false;
-    }
-  }, {
-    key: "any",
-    value: function any() {
-      return Object.keys(this.errors).length > 0;
-    }
-  }]);
-
-  return Errors;
-}();
-
-var Form =
-/*#__PURE__*/
-function () {
-  function Form(data) {
-    _classCallCheck(this, Form);
-
-    /* Form Data */
-    this.originalData = data;
-
-    for (var field in data) {
-      this[field] = data[field];
-    }
-    /* Errors Instance */
-
-
-    this.errors = new Errors();
-  }
-
-  _createClass(Form, [{
-    key: "data",
-    value: function data() {
-      var cloneData = {};
-
-      for (var property in this.originalData) {
-        cloneData[property] = this[property];
-      }
-
-      return cloneData;
-    }
-  }, {
-    key: "post",
-    value: function post(endpoint) {
-      return this.submit('post', endpoint);
-    }
-  }, {
-    key: "get",
-    value: function get() {
-      return this.submit('get', endpoint);
-    }
-  }, {
-    key: "put",
-    value: function put() {
-      return this.submit('put', endpoint);
-    }
-  }, {
-    key: "patch",
-    value: function patch() {
-      return this.submit('patch', endpoint);
-    }
-  }, {
-    key: "delete",
-    value: function _delete() {
-      return this.submit('delete', endpoint);
-    }
-  }, {
-    key: "reset",
-    value: function reset() {
-      for (var field in this.data()) {
-        this[field] = '';
-      }
-
-      this.errors.clear();
-    }
-  }, {
-    key: "submit",
-    value: function submit(requestType, endpoint) {
-      var _this = this;
-
-      return new Promise(function (resolve, reject) {
-        axios[requestType](endpoint, _this.data()).then(function (result) {
-          _this.onSuccess(result.data);
-
-          resolve(result.data);
-        })["catch"](function (error) {
-          _this.onFail(error.response.data.errors);
-
-          reject(error.response.data.errors);
-        });
-      });
-    }
-  }, {
-    key: "onSuccess",
-    value: function onSuccess(response) {
-      console.log(response);
-
-      if (response.responseCode == 1) {
-        alert(response.message); //this would be a general response, you can place general actions here after submitting form
-      } else {
-        alert("Other general response"); //this would be a general response, you can place general actions here after submitting form
-      }
-
-      this.reset();
-    }
-  }, {
-    key: "onFail",
-    value: function onFail(errors) {
-      console.log(errors);
-      this.errors.record(errors);
-    }
-  }]);
-
-  return Form;
-}();
-
 var app = new Vue({
   el: '#app',
   data: {
-    formService: new Form({
+    formService: new _core_Form__WEBPACK_IMPORTED_MODULE_0__["default"]({
       project_name: '',
       description: ''
     })
@@ -50332,23 +50180,6 @@ var app = new Vue({
         console.log("promt this");
       });
     }
-  }
-});
-var sharedResources = {
-  user: {
-    name: 'Balagaboom'
-  }
-};
-var one = new Vue({
-  el: '#one',
-  data: {
-    shared: sharedResources
-  }
-});
-var two = new Vue({
-  el: '#two',
-  data: {
-    shared: sharedResources
   }
 });
 
@@ -50552,6 +50383,196 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotificationComponent_vue_vue_type_template_id_307ad1f7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/core/Errors.js":
+/*!*************************************!*\
+  !*** ./resources/js/core/Errors.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Errors =
+/*#__PURE__*/
+function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      if (field) {
+        delete this.errors[field];
+      } else {
+        this.errors = {};
+      }
+    }
+  }, {
+    key: "exists",
+    value: function exists(field) {
+      return this.errors[field] ? true : false;
+    }
+  }, {
+    key: "any",
+    value: function any() {
+      return Object.keys(this.errors).length > 0;
+    }
+  }]);
+
+  return Errors;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Errors);
+
+/***/ }),
+
+/***/ "./resources/js/core/Form.js":
+/*!***********************************!*\
+  !*** ./resources/js/core/Form.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Errors */ "./resources/js/core/Errors.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Form =
+/*#__PURE__*/
+function () {
+  function Form(data) {
+    _classCallCheck(this, Form);
+
+    /* Form Data */
+    this.originalData = data;
+
+    for (var field in data) {
+      this[field] = data[field];
+    }
+    /* Errors Instance */
+
+
+    this.errors = new _Errors__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  _createClass(Form, [{
+    key: "data",
+    value: function data() {
+      var cloneData = {};
+
+      for (var property in this.originalData) {
+        cloneData[property] = this[property];
+      }
+
+      return cloneData;
+    }
+  }, {
+    key: "post",
+    value: function post(endpoint) {
+      return this.submit('post', endpoint);
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      return this.submit('get', endpoint);
+    }
+  }, {
+    key: "put",
+    value: function put() {
+      return this.submit('put', endpoint);
+    }
+  }, {
+    key: "patch",
+    value: function patch() {
+      return this.submit('patch', endpoint);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      return this.submit('delete', endpoint);
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      for (var field in this.data()) {
+        this[field] = '';
+      }
+
+      this.errors.clear();
+    }
+  }, {
+    key: "submit",
+    value: function submit(requestType, endpoint) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios[requestType](endpoint, _this.data()).then(function (result) {
+          _this.onSuccess(result.data);
+
+          resolve(result.data);
+        })["catch"](function (error) {
+          _this.onFail(error.response.data.errors);
+
+          reject(error.response.data.errors);
+        });
+      });
+    }
+  }, {
+    key: "onSuccess",
+    value: function onSuccess(response) {
+      console.log(response);
+
+      if (response.responseCode == 1) {
+        alert(response.message); //this would be a general response, you can place general actions here after submitting form
+      } else {
+        alert("Other general response"); //this would be a general response, you can place general actions here after submitting form
+      }
+
+      this.reset();
+    }
+  }, {
+    key: "onFail",
+    value: function onFail(errors) {
+      console.log(errors);
+      this.errors.record(errors);
+    }
+  }]);
+
+  return Form;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Form);
 
 /***/ }),
 
