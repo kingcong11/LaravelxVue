@@ -26,8 +26,8 @@
     </div>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script> --}}
+    {{-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> --}}
     <script src="/js/app.js"></script>
 
 </body>

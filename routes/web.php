@@ -26,3 +26,6 @@ Route::get('skills', function(){
 });
 
 Route::resource('projects', 'ProjectsController');
+Route::get('/test', function(){
+    return view('test');
+});

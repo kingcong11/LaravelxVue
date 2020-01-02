@@ -177,3 +177,31 @@ const app = new Vue({
     },
 
 });
+
+
+let sharedResources = {
+    user : {
+        name : 'Balagaboom'
+    }
+}
+
+
+const one = new Vue({
+
+    el: '#one',
+
+    data: {
+        shared : sharedResources
+    } 
+
+});
+
+const two = new Vue({
+
+    el: '#two',
+
+    data: {
+        shared : sharedResources
+    } 
+
+});

@@ -50334,6 +50334,23 @@ var app = new Vue({
     }
   }
 });
+var sharedResources = {
+  user: {
+    name: 'Balagaboom'
+  }
+};
+var one = new Vue({
+  el: '#one',
+  data: {
+    shared: sharedResources
+  }
+});
+var two = new Vue({
+  el: '#two',
+  data: {
+    shared: sharedResources
+  }
+});
 
 /***/ }),
 
